@@ -1,0 +1,58 @@
+//seleção de elementos para fazer os eventos neles
+const multiplicationForm = document.querySelector("#multiplication-form");
+// o numero da tabuado
+const numberInput = document.querySelector("#number");
+// n de mutiplicações
+const multiplicationInput = document.querySelector("#multiplicator");
+//mudando o span no title na table
+const multiplicationTitle = document.querySelector("#multiplication-title span")
+
+const multiplicationTable = document.querySelector("#multiplication-operations");
+
+//funções
+//
+const createTable = (number,multiplicatorNumber) =>{
+    // para limpar o tamplate, acessa o html do table e coloca string vazia
+    multiplicationTable.innerHTML = ""; 
+    // template
+    for (i = 1; i <= multiplicatorNumber; i++){
+        const result = number * i;
+        // insere no html pelo DOM
+        const template = `<div class="row"
+                            <div class = "operations"> ${number} x ${i} =
+                            </div>
+                            <div class = "result">${result}</div>
+                         </div>`;
+ 
+        // `<div class="row">
+        //     <div class="operation">${number} x ${i} = </div>
+        //     <div class="result"> ${result}</div>
+        // </div>`;
+
+        // esse objeto permite transferir o "template" para o html
+        const parser = new DOMParser()
+        // transformar uma string em html -- original e o de conversão
+        const htmlTemplate = parser.parseFromString(template,"text/html")
+        // selecionar o row que esta sendo criado dinamicamente para colocar ele no html, o roe ainda nao consta no html
+        const row = htmlTemplate.querySelector("row")
+        //adc um elemento filho na tabela. que é o row
+        // faz isso dentro no loop, n vezes, baseado na quantidade que colocou em multiplicator number
+        multiplicationTable.appendChild(row);
+    }
+    multiplicationTitle.innerText = number;
+};
+
+//eventos
+
+multiplicationForm.addEventListener("submit", (e) => {
+    // nao permite que envie faltando numero
+    e.preventDefault(); 
+    // transforma em variavel os numeros e em inteiros com o +
+    const multiplicationNumber = numberInput.value;
+
+    const multiplicatorNumber = +multiplicationInput.value;
+
+    //validação p/ se o usuario colocou os dois numeros que precisa 
+    if (!multiplicationNumber || !multiplicatorNumber) return;
+   createTable(multiplicationNumber, multiplicatorNumber );
+});
